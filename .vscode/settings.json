@@ -1,0 +1,5 @@
+{
+    "cmake.configureOnOpen": true,
+    "java.dependency.syncWithFolderExplorer": true,
+    "java.configuration.updateBuildConfiguration": "interactive"
+}
