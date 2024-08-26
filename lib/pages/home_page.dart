@@ -12,6 +12,7 @@ import 'package:flutterportfolio/widgets/main_desktop.dart';
 import 'package:flutterportfolio/widgets/main_mobile.dart';
 import 'package:flutterportfolio/widgets/mobile_skills.dart';
 import 'package:flutterportfolio/widgets/project_card.dart';
+import 'package:flutterportfolio/widgets/projects_section.dart';
 import 'package:flutterportfolio/widgets/site_logo.dart';
 import 'package:flutterportfolio/utils/project_utils.dart';
 
@@ -95,28 +96,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               //PROJECTS
-              Container(
-                width: screenWidth,
-                padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
-                child: Column(
-                  children: [
-                    // work projects title
-                    const Text(
-                      "Work Projects",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: CustomColor.whitePrimary,
-                      ),
-                    ),
-
-                    // work projects card
-                    ProjectCardWidget(project: workProjectUtils.first)
-                  ],
-                ),
-              ),
+              const ProjectsSection(),
               //CONTACT
-              Container(
+              Container( 
                 height: 500,
                 width: double.maxFinite,
                 color: Color.fromRGBO(26, 31, 54, 1),

@@ -24,7 +24,7 @@ class ProjectCardWidget extends StatelessWidget {
         children: [
           Image.asset(
             project.image,
-            height: 140,
+            height: 160,
             width: 250,
             fit: BoxFit.cover,
           ),
@@ -43,7 +43,7 @@ class ProjectCardWidget extends StatelessWidget {
             child: Text(
               project.subtitle,
               style: const TextStyle(
-                fontSize: 10,
+                fontSize: 12,
                 color: CustomColor.whiteSecondary,
               ),
             ),

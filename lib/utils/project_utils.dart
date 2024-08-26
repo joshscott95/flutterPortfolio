@@ -18,16 +18,18 @@ class ProjectUtils {
 
 List<ProjectUtils> hobbyProjectUtils = [
   ProjectUtils(
-    image: 'assets/projects/',
+    image: 'assets/projects/geiger_counter.png',
     title: 'Geiger counter',
-    subtitle: '',
+    subtitle: 'Measures radiation samples',
     webLink: '',
+    githubLink: '',
   ),
   ProjectUtils(
-    image: 'assets/projects/',
+    image: 'assets/projects/eggescape.png',
     title: 'egg escape',
-    subtitle: '',
-    webLink: '',
+    subtitle: 'JS Sidescroller',
+    webLink: 'https://github.com/joshscott95/Egg-Escape',
+    githubLink: 'https://github.com/joshscott95/Egg-Escape',
   ),
 ];
 
@@ -40,15 +42,17 @@ List<ProjectUtils> workProjectUtils = [
     githubLink: 'https://github.com/joshscott95/SageSociety',
   ),
   ProjectUtils(
-    image: 'assets/projects/',
+    image: 'assets/projects/autoflow.png',
     title: 'autoflow',
-    subtitle: '',
-    webLink: '',
+    subtitle: 'Auto dealership CRM',
+    webLink: 'https://github.com/joshscott95/AutoFlow',
+    githubLink: 'https://github.com/joshscott95/AutoFlow',
   ),
   ProjectUtils(
-    image: 'assets/projects/',
+    image: 'assets/projects/confgo.png',
     title: 'confgo',
-    subtitle: '',
-    webLink: '',
+    subtitle: 'Conference event planning',
+    webLink: 'https://github.com/joshscott95/Conference_GO',
+    githubLink: 'https://github.com/joshscott95/Conference_GO',
   ),
 ];
