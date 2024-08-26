@@ -11,7 +11,9 @@ import 'package:flutterportfolio/widgets/header_mobile.dart';
 import 'package:flutterportfolio/widgets/main_desktop.dart';
 import 'package:flutterportfolio/widgets/main_mobile.dart';
 import 'package:flutterportfolio/widgets/mobile_skills.dart';
+import 'package:flutterportfolio/widgets/project_card.dart';
 import 'package:flutterportfolio/widgets/site_logo.dart';
+import 'package:flutterportfolio/utils/project_utils.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,70 +32,104 @@ class _HomePageState extends State<HomePage> {
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: CustomColor.scaffoldBG,
-          endDrawer: constraints.maxWidth >= kMinDekstopWidth
-              ? null
-              : const DrawerMobile(),
-          body: ListView(scrollDirection: Axis.vertical, children: [
-            // MAIN
-            if (constraints.maxWidth >= kMinDekstopWidth)
-              const HeaderDesktop()
-            else
-              HeaderMobile(
-                onLogoTap: () {},
-                onMenuTap: () {
-                  scaffoldKey.currentState?.openEndDrawer();
-                },
-              ),
-
-            if (constraints.maxWidth >= kMinDekstopWidth)
-              const MainDesktop()
-            else
-              const MainMobile(),
-
-            //SKILLS
-            Container(
-              width: screenWidth,
-              padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
-              color: Color.fromRGBO(26, 31, 54, 1),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  //title
-                  const Text(
-                    "What I can do",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: CustomColor.whitePrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 50),
-
-                  //platforms and skills
-                  if(constraints.maxWidth>=kMedDekstopWidth)
-                    const DesktopSkills()
-                  else
-                    const MobileSkills(),
-                  
-                ],
+        key: scaffoldKey,
+        backgroundColor: CustomColor.scaffoldBG,
+        endDrawer: constraints.maxWidth >= kMinDekstopWidth
+            ? null
+            : const DrawerMobile(),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: const AssetImage('assets/tech.png'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.6),
+                BlendMode.dstATop,
               ),
             ),
-            //PROJECTS
-            Container(
-              height: 500,
-              width: double.maxFinite,
-            ), //CONTACT
-            Container(
+          ),
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: [
+              // MAIN
+              if (constraints.maxWidth >= kMinDekstopWidth)
+                const HeaderDesktop()
+              else
+                HeaderMobile(
+                  onLogoTap: () {},
+                  onMenuTap: () {
+                    scaffoldKey.currentState?.openEndDrawer();
+                  },
+                ),
+
+              if (constraints.maxWidth >= kMinDekstopWidth)
+                const MainDesktop()
+              else
+                const MainMobile(),
+
+              //SKILLS
+              Container(
+                width: screenWidth,
+                padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
+                color: const Color.fromRGBO(26, 31, 54, 1),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    //title
+                    const Text(
+                      "What I can do",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: CustomColor.whitePrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+
+                    //platforms and skills
+                    if (constraints.maxWidth >= kMedDekstopWidth)
+                      const DesktopSkills()
+                    else
+                      const MobileSkills(),
+                  ],
+                ),
+              ),
+              //PROJECTS
+              Container(
+                width: screenWidth,
+                padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
+                child: Column(
+                  children: [
+                    // work projects title
+                    const Text(
+                      "Work Projects",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: CustomColor.whitePrimary,
+                      ),
+                    ),
+
+                    // work projects card
+                    ProjectCardWidget(project: workProjectUtils.first)
+                  ],
+                ),
+              ),
+              //CONTACT
+              Container(
                 height: 500,
                 width: double.maxFinite,
-                color: Color.fromRGBO(26, 31, 54, 1)), //FOOTER
-            Container(
-              height: 500,
-              width: double.maxFinite,
-            ),
-          ]));
+                color: Color.fromRGBO(26, 31, 54, 1),
+              ),
+              //FOOTER
+              Container(
+                height: 500,
+                width: double.maxFinite,
+              ),
+            ],
+          ),
+        ),
+      );
     });
   }
 }
