@@ -7,6 +7,7 @@ import 'package:flutterportfolio/widgets/drawer_mobile.dart';
 import 'package:flutterportfolio/widgets/header_desktop.dart';
 import 'package:flutterportfolio/widgets/header_mobile.dart';
 import 'package:flutterportfolio/widgets/main_desktop.dart';
+import 'package:flutterportfolio/widgets/main_mobile.dart';
 import 'package:flutterportfolio/widgets/site_logo.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
@@ -42,7 +44,9 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
 
-            const MainDesktop(),
+            if (constraints.maxWidth >= kMinDekstopWidth)
+            const MainDesktop() else const MainMobile(),
+            
 
             //SKILLS
             Container(
