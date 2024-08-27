@@ -17,18 +17,23 @@ class MainMobile extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,  // Changed to center
+        crossAxisAlignment: CrossAxisAlignment.center, // Changed to center
         children: [
           // avatar img
-          Image.asset("assets/2-removebg-preview.png"),
-          const SizedBox(height: 20),  // Add some space between image and text
-          Center(  // Wrap the rest in a Center widget
+          ClipRRect(
+              child: Image.asset(
+            "assets/2-removebg-preview.png",
+            width: screenWidth / 2,
+          )),
+          const SizedBox(height: 20), // Add some space between image and text
+          Center(
+            // Wrap the rest in a Center widget
             child: Column(
               children: [
                 //intro text
                 const Text(
                   "Joshua Scott\nFull-Stack Developer\nCoding Enthusiast",
-                  textAlign: TextAlign.center,  // Center align the text
+                  textAlign: TextAlign.center, // Center align the text
                   style: TextStyle(
                     fontSize: 24.0,
                     height: 1.5,
@@ -54,5 +59,6 @@ class MainMobile extends StatelessWidget {
           ),
         ],
       ),
-  );}
+    );
+  }
 }

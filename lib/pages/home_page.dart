@@ -3,9 +3,13 @@ import 'package:flutterportfolio/constants/colors.dart';
 import 'package:flutterportfolio/constants/drawer_constraints.dart';
 import 'package:flutterportfolio/constants/nav_items.dart';
 import 'package:flutterportfolio/constants/skill_items.dart';
+import 'package:flutterportfolio/constants/sns_links.dart';
 import 'package:flutterportfolio/styles/style.dart';
+import 'package:flutterportfolio/widgets/contact_section.dart';
+import 'package:flutterportfolio/widgets/custom_textfield.dart';
 import 'package:flutterportfolio/widgets/desktop_skills.dart';
 import 'package:flutterportfolio/widgets/drawer_mobile.dart';
+import 'package:flutterportfolio/widgets/footer.dart';
 import 'package:flutterportfolio/widgets/header_desktop.dart';
 import 'package:flutterportfolio/widgets/header_mobile.dart';
 import 'package:flutterportfolio/widgets/main_desktop.dart';
@@ -15,6 +19,8 @@ import 'package:flutterportfolio/widgets/project_card.dart';
 import 'package:flutterportfolio/widgets/projects_section.dart';
 import 'package:flutterportfolio/widgets/site_logo.dart';
 import 'package:flutterportfolio/utils/project_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,6 +31,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final scrollController = ScrollController();
+  final List<GlobalKey> navbarKeys = List.generate(4, (index) => GlobalKey());
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -37,7 +46,14 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: CustomColor.scaffoldBG,
         endDrawer: constraints.maxWidth >= kMinDekstopWidth
             ? null
-            : const DrawerMobile(),
+            : DrawerMobile(
+                onNavItemTap: (int navIndex) {
+                  //call function
+                  scaffoldKey.currentState?.closeEndDrawer();
+
+                  scrollToSection(navIndex);
+                },
+              ),
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -49,69 +65,97 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          child: ListView(
+          child: SingleChildScrollView(
+            controller: ScrollController(),
             scrollDirection: Axis.vertical,
-            children: [
-              // MAIN
-              if (constraints.maxWidth >= kMinDekstopWidth)
-                const HeaderDesktop()
-              else
-                HeaderMobile(
-                  onLogoTap: () {},
-                  onMenuTap: () {
-                    scaffoldKey.currentState?.openEndDrawer();
-                  },
-                ),
+            child: Column(
+              children: [
+                SizedBox(key: navbarKeys.first),
+                // MAIN
+                if (constraints.maxWidth >= kMinDekstopWidth)
+                  HeaderDesktop(onNavMenuTap: (int navIndex) {
+                    //call function
+                  })
+                else
+                  HeaderMobile(
+                    onLogoTap: () {},
+                    onMenuTap: () {
+                      scaffoldKey.currentState?.openEndDrawer();
+                    },
+                  ),
 
-              if (constraints.maxWidth >= kMinDekstopWidth)
-                const MainDesktop()
-              else
-                const MainMobile(),
+                if (constraints.maxWidth >= kMinDekstopWidth)
+                  const MainDesktop()
+                else
+                  const MainMobile(),
 
-              //SKILLS
-              Container(
-                width: screenWidth,
-                padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
-                color: const Color.fromRGBO(26, 31, 54, 1),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    //title
-                    const Text(
-                      "What I can do",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: CustomColor.whitePrimary,
+                //SKILLS
+                Container(
+                  key: navbarKeys[1],
+                  width: screenWidth,
+                  padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
+                  color: const Color.fromRGBO(26, 31, 54, 1),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      //title
+                      const Text(
+                        "What I can do",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: CustomColor.whitePrimary,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 50),
+                      const SizedBox(height: 50),
 
-                    //platforms and skills
-                    if (constraints.maxWidth >= kMedDekstopWidth)
-                      const DesktopSkills()
-                    else
-                      const MobileSkills(),
-                  ],
+                      //platforms and skills
+                      if (constraints.maxWidth >= kMedDekstopWidth)
+                        const DesktopSkills()
+                      else
+                        const MobileSkills(),
+                    ],
+                  ),
                 ),
-              ),
-              //PROJECTS
-              const ProjectsSection(),
-              //CONTACT
-              Container( 
-                height: 500,
-                width: double.maxFinite,
-                color: Color.fromRGBO(26, 31, 54, 1),
-              ),
-              //FOOTER
-              Container(
-                height: 500,
-                width: double.maxFinite,
-              ),
-            ],
+                const SizedBox(height: 30),
+                //PROJECTS
+                ProjectsSection(
+                  key: navbarKeys[2],
+                ),
+
+                const SizedBox(height: 30),
+                //CONTACT
+                ContactSection(
+                  key: navbarKeys[3],
+                ),
+                const SizedBox(height: 30),
+
+                //FOOTER
+                Footer(),
+              ],
+            ),
           ),
         ),
       );
     });
   }
+
+ void scrollToSection(int navIndex) async {
+  if (navIndex == 4) {
+    // open Twitter link
+    final Uri url = Uri.parse(SnsLinks.twitter);
+    if (await canLaunchUrlString(SnsLinks.twitter)) {
+      await launchUrlString(SnsLinks.twitter);
+    } else {
+      // Handle error - unable to launch URL
+      print('Could not launch $url');
+    }
+    return;
+  }
+  final key = navbarKeys[navIndex];
+  Scrollable.ensureVisible(key.currentContext!, 
+    duration: const Duration(milliseconds: 500), 
+    curve: Curves.easeInOut
+  );
+}
 }
