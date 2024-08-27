@@ -1,19 +1,23 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutterportfolio/constants/colors.dart';
-import 'package:flutterportfolio/constants/drawer_constraints.dart';
 import 'package:flutterportfolio/constants/sns_links.dart';
 import 'package:flutterportfolio/widgets/custom_textfield.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
+import 'package:http/http.dart' as http;
 
 class ContactSection extends StatelessWidget {
-  const ContactSection({super.key});
+  ContactSection({super.key});
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(25, 20, 25, 60),
-      color: Color.fromRGBO(26, 31, 54, 1),
+      color: const Color.fromRGBO(26, 31, 54, 1),
       child: Column(
         children: [
           // title
@@ -25,11 +29,11 @@ class ContactSection extends StatelessWidget {
               color: CustomColor.whitePrimary,
             ),
           ),
-
           const SizedBox(height: 50),
 
+          // Name and Email fields (conditional rendering)
           ConstrainedBox(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               maxWidth: 700,
             ),
             child: LayoutBuilder(
@@ -42,13 +46,16 @@ class ContactSection extends StatelessWidget {
               },
             ),
           ),
+
           const SizedBox(height: 15),
+
           // message
           ConstrainedBox(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               maxWidth: 700,
             ),
             child: CustomTextfield(
+              controller: messageController,
               hintText: "Your message",
               maxLines: 16,
             ),
@@ -57,40 +64,51 @@ class ContactSection extends StatelessWidget {
 
           // send btn
           ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: 700,
-            ),
-            child: SizedBox(
-              width: double.maxFinite,
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text("Get in touch"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColor.yellowPrimary,
-                  foregroundColor: Colors.white,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 30),
-
-          ConstrainedBox(
             constraints: const BoxConstraints(
               maxWidth: 700,
             ),
-            child: LayoutBuilder(
-              builder:(context, constraints) {
-              if (constraints.maxWidth>=kMinDekstopWidth){
-                return buildNameEmailFieldDesktop();
-              }
+            child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      final response = await sendEmail(
+                        nameController.text,
+                        emailController.text,
+                        messageController.text,
+                      );
+                      print('Response status: ${response.statusCode}');
+                      print('Response body: ${response.body}');
 
-              // else
-              return buildNameEmailFieldMobile();
-            },
-            ),
+                      if (response.statusCode == 200) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Email sent successfully!')),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'Failed to send email. Please try again.')),
+                        );
+                      }
+                    } catch (e) {
+                      print('Error: $e');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(
+                                'Failed to send email. Please try again.')),
+                      );
+                    }
+                  },
+                  child: const Text("Get in touch"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColor.yellowPrimary,
+                    foregroundColor: Colors.white,
+                  ),
+                )),
           ),
-          const SizedBox(height: 15),
+
+          const SizedBox(height: 30),
 
           // SNS icon button links
           Wrap(
@@ -100,9 +118,9 @@ class ContactSection extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () async {
-                        if (await canLaunchUrlString(SnsLinks.github)) {
-                          await launchUrlString(SnsLinks.github);
-                        };
+                  if (await canLaunchUrlString(SnsLinks.github)) {
+                    await launchUrlString(SnsLinks.github);
+                  }
                 },
                 child: Image.asset(
                   "assets/github.png",
@@ -112,16 +130,37 @@ class ContactSection extends StatelessWidget {
               ),
               InkWell(
                 onTap: () async {
-                        if (await canLaunchUrlString(SnsLinks.linkedin)) {
-                          await launchUrlString(SnsLinks.linkedin);
-                        };
+                  if (await canLaunchUrlString(SnsLinks.linkedin)) {
+                    await launchUrlString(SnsLinks.linkedin);
+                  }
                 },
                 child: Image.asset("assets/linkedin.png", width: 28),
               ),
             ],
-          )
+          ),
         ],
       ),
+    );
+  }
+
+  Future<http.Response> sendEmail(String name, String email, String message) {
+    final Uri url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+
+    return http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'service_id': 'service_8r1dbcs', // Replace with your service ID
+        'template_id': 'template_fmshbrl', // Replace with your template ID
+        'user_id': 'Y-QYCXmGkBAU-ur5m', // Replace with your user ID
+        'template_params': {
+          'user_name': name,
+          'user_email': email,
+          'user_message': message,
+        },
+      }),
     );
   }
 
@@ -131,6 +170,7 @@ class ContactSection extends StatelessWidget {
         // name
         Flexible(
           child: CustomTextfield(
+            controller: nameController,
             hintText: "Your name",
           ),
         ),
@@ -139,6 +179,7 @@ class ContactSection extends StatelessWidget {
         // email
         Flexible(
           child: CustomTextfield(
+            controller: emailController,
             hintText: "Your email",
           ),
         ),
@@ -151,12 +192,14 @@ class ContactSection extends StatelessWidget {
       children: [
         // name
         CustomTextfield(
+          controller: nameController,
           hintText: "Your name",
         ),
         const SizedBox(height: 15),
 
         // email
         CustomTextfield(
+          controller: emailController,
           hintText: "Your email",
         ),
       ],
