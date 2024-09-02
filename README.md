@@ -41,7 +41,7 @@ To get a local copy up and running, follow these simple steps:
 flutter --version
 flutter pub get
 flutter run
-```
+
 
 flutterportfolio/
 │
@@ -55,7 +55,7 @@ flutterportfolio/
 │
 ├── pubspec.yaml               # Project dependencies and configuration
 └── README.md                  # This README file
-
+```
 ## Technologies used
 
 - [Flutter](#flutter)
