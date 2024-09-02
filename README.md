@@ -37,7 +37,7 @@ flutter --version
 flutter pub get
 flutter run
 ```
-**Project Structure
+##Project Structure
 ```
 flutterportfolio/
 │
@@ -52,7 +52,7 @@ flutterportfolio/
 ├── pubspec.yaml               # Project dependencies and configuration
 └── README.md                  # This README file
 ```
-**Technologies used
+##Technologies used
 
 - [Flutter]
 - [Dart]
