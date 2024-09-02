@@ -10,9 +10,6 @@ This repository hosts the code for a personal portfolio application built using 
 - [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ## Demo
 
@@ -39,8 +36,9 @@ To get a local copy up and running, follow these simple steps:
 flutter --version
 flutter pub get
 flutter run
-
-
+```
+**Project Structure
+```
 flutterportfolio/
 │
 ├── lib/                       # Main source code folder
@@ -54,7 +52,7 @@ flutterportfolio/
 ├── pubspec.yaml               # Project dependencies and configuration
 └── README.md                  # This README file
 ```
-## Technologies used
+**Technologies used
 
 - [Flutter]
 - [Dart]
