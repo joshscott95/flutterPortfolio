@@ -1,7 +1,5 @@
 # Flutter Portfolio
 
-![Portfolio Screenshot](path-to-screenshot.png)
-
 This repository hosts the code for a personal portfolio application built using Flutter. The portfolio showcases projects, skills, and experiences, offering an interactive and engaging way for users to explore the work and background of Joshua Scott.
 
 ## Table of Contents
@@ -58,9 +56,9 @@ flutterportfolio/
 ```
 ## Technologies used
 
-- [Flutter](#flutter)
-- [Dart](#dart)
-- [Responsive Design](#responsive-design)
+- [Flutter]
+- [Dart]
+- [Responsive Design]
 
 ## Project Link
 - [https://joshuacs.netlify.app/]
